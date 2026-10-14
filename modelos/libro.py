@@ -20,5 +20,10 @@ class Libro:
             f"disponible={self.disponible!r}"
         )
 
+    #Método equals para comparar por isbn
     def __eq__(self, _value):
         return self.isbn == _value.isbn
+
+    #Método equals para comparar por titulo
+    # def __eq__(self, _value):
+    #     return self.titulo == _value

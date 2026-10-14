@@ -20,14 +20,39 @@ def mostrar_menu():
     print("9. Guardar datos")
     print("0. Salir")
 
+#Método para opción 1
 def registrar_libro(biblioteca):
     isbn = input("ISBN: ").strip()
-    titulo = input("Titulo: ").strip()
+    titulo = input("Titulo: ").strip().upper()
     autor = input("Autor: ").strip()
     anio = input("Año: ").strip()
     genero = input("Género: ").strip()
     libro = Libro(isbn, titulo, autor, anio, genero)
     biblioteca.registrar_libro(libro)
+
+#Método para opción 2
+def registrar_usuario(biblioteca):
+    id = int(input("ID: "))
+    nombre = input("Nombre: ")
+    apellidos = input("Apellidos: ")
+    email = input("Email: ")
+    usuario = Usuario(id, nombre, apellidos, email)
+    biblioteca.registrar_usuario(usuario)
+
+#Método para opción 3
+def buscar_libro(biblioteca):
+    isbn = input("Introduce el isbn del libro que deseas buscar: ").strip().upper()
+    biblioteca.buscar_libroNom(isbn)
+
+#Método para opción 4
+def listar_libros(biblioteca):
+    biblioteca.listar_libros()
+
+#Método para opción 5
+def realizar_prestamo(biblioteca):
+    id_usuario = int(input("Introduce tu id: "))
+    titulo = input("Introduce el nombre del libro que deseas recibir el prestamo: ").strip().upper()
+    biblioteca.realizar_prestamo(id_usuario, titulo)
 
 def main():
 
@@ -39,13 +64,13 @@ def main():
         if opcion == '1':
             registrar_libro(biblioteca)
         elif opcion == '2':
-            pass
+            registrar_usuario(biblioteca)
         elif opcion == '3':
-            pass
+            buscar_libro(biblioteca)
         elif opcion == '4':
-            pass
+            listar_libros(biblioteca)
         elif opcion == '5':
-            pass
+            realizar_prestamo(biblioteca)
         elif opcion == '6':
             pass
         elif opcion == '7':
