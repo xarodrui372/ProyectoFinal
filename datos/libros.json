@@ -1,0 +1,10 @@
+[
+    {
+        "isbn": "123",
+        "titulo": "PYTHON",
+        "autor": "JI",
+        "genero": "2026",
+        "anio": "Informática",
+        "disponible": false
+    }
+]

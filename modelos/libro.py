@@ -27,3 +27,14 @@ class Libro:
     #Método equals para comparar por titulo
     # def __eq__(self, _value):
     #     return self.titulo == _value
+
+    #Método para pasar el objeto a diccionario, se usará para escribir en JSON
+    def a_diccionario(self):
+        return{
+            "isbn": self.isbn,
+            "titulo": self.titulo,
+            "autor": self.autor,
+            "genero": self.genero,
+            "anio": self.anio,
+            "disponible": self.disponible
+        }

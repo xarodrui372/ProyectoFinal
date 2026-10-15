@@ -18,3 +18,12 @@ class Usuario:
 
     def __eq__(self, _value):
         return self.id == _value.id
+
+    #Método para pasar el objeto a diccionario, se usará para escribir en JSON
+    def a_diccionario(self):
+        return{
+            "id": self.id,
+            "nombre": self.nombre,
+            "apellidos": self.apellidos,
+            "email": self.email
+        }

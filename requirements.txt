@@ -1,0 +1,1 @@
+# El proyecto no requiere dependencias externas (utiliza únicamente módulos nativos de Python).

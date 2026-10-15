@@ -54,10 +54,28 @@ def realizar_prestamo(biblioteca):
     titulo = input("Introduce el nombre del libro que deseas recibir el prestamo: ").strip().upper()
     biblioteca.realizar_prestamo(id_usuario, titulo)
 
+#Método para opción 6
+def registrar_devolucion(biblioteca):
+    titulo = input("Introduce el nombre del libro que deseas devolver: ").strip().upper()
+    biblioteca.registrar_devolucion(titulo)
+
+#Método para opción 7
+def prestamos_activos(biblioteca):
+    biblioteca.prestamos_activos()
+
+#Método para opción 8
+def mostrar_prestamos_usuarios(biblioteca):
+    id_buscado = int(input("Introduce el id del usuario que deseas mostrar sus prestamos: "))
+    biblioteca.mostrar_prestamos_usuarios(id_buscado)
+
+#Método para opción 9
+def guardar_datos(biblioteca):
+    biblioteca.guardar_datos()
+
 def main():
-
     biblioteca = Biblioteca()
-
+    biblioteca.cargar_datos()
+    
     while True:
         mostrar_menu()
         opcion = input("Selecciona una opción: ")
@@ -72,13 +90,13 @@ def main():
         elif opcion == '5':
             realizar_prestamo(biblioteca)
         elif opcion == '6':
-            pass
+            registrar_devolucion(biblioteca)
         elif opcion == '7':
-            pass
+            prestamos_activos(biblioteca)
         elif opcion == '8':
-            pass
+            mostrar_prestamos_usuarios(biblioteca)
         elif opcion == '9':
-            pass
+            guardar_datos(biblioteca)
         elif opcion == '0':
             break
         else:

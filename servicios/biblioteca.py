@@ -1,5 +1,8 @@
 from modelos.libro import Libro
 from modelos.prestamo import Prestamo
+from modelos.usuarios import Usuario
+from datetime import date
+import json
 class Biblioteca:
     def __init__(self):
         self.libros = libros = []
@@ -46,8 +49,7 @@ class Biblioteca:
             if libro.titulo == titulo_buscado:
                 print(f"El libro {titulo_buscado} ha sido encontrado.")
                 return libro
-            else:
-                print(f"El libro {titulo_buscado} no ha sido encontrado")
+        print(f"El libro {titulo_buscado} no ha sido encontrado")
         return None
 
     #Método para listar todos los libros, se va a usar en la opción 4 del menú.
@@ -69,3 +71,92 @@ class Biblioteca:
         self.prestamos.append(nuevo_prestamo)
         libro.disponible = False
         print("Prestamo realizado correctamente")
+
+    #Método para registrar devolución
+    def registrar_devolucion(self, titulo_devuelto):
+        for prestamo in self.prestamos:
+            if prestamo.Libro.titulo == titulo_devuelto and prestamo.activo == True:
+                prestamo.Libro.disponible = True
+                prestamo.fecha_devolucion = date.today()
+                print("El libro se ha devuelto correctamente.")
+                return
+        print("No se encuentra ningún prestamo disponible para ese libro.")
+
+    #Mostrar préstamos activos
+    def prestamos_activos(self):
+        hay_activos = False
+        for prestamo in self.prestamos:
+            if prestamo.activo:
+                print(f"{prestamo}\n")
+                hay_activos = True
+        if hay_activos == False:
+            print("No se encuentran prestamos activos en este momento")
+
+    #Mostrar prestamos de un usuario
+    def mostrar_prestamos_usuarios(self, id_buscado):
+        usuario_buscado = self.buscar_usuarioID(id_buscado)
+        tiene_prestamos = False
+        if usuario_buscado is None:
+            print("El usuario con ese ID no existe.")
+            return
+        for prestamo in self.prestamos:
+            if prestamo.Usuario.id == id_buscado:
+                print(f"{prestamo}\n")
+                tiene_prestamos = True
+        if tiene_prestamos == False:
+            print("El usuario con ese id no tiene prestamos")
+
+    #Método para guardar datos
+    def guardar_datos(self):
+        #Pasar objetos a diccionarios
+        libros_dic = [libro.a_diccionario() for libro in self.libros]
+        usuarios_dic = [usuario.a_diccionario() for usuario in self.usuarios]
+        prestamos_dic = [prestamo.a_diccionario() for prestamo in self.prestamos]
+
+        #Guardar datos en libros.json
+        with open("datos/libros.json", "w", encoding="utf-8") as fichero:
+            json.dump(libros_dic, fichero, indent=4, ensure_ascii=False)
+
+        #Guardar datos en usuarios.json
+        with open("datos/usuarios.json", "w", encoding="utf-8") as fichero:
+            json.dump(usuarios_dic, fichero, indent=4, ensure_ascii=False)
+
+        #Guardar datos en prestamos.json
+        with open("datos/prestamos.json", "w", encoding="utf-8") as fichero:
+            json.dump(prestamos_dic, fichero, indent=4, ensure_ascii=False)
+        print("Datos guardados correctamente.")
+
+    #Método cargar datos para cuando se guarden datos y se cierre el programa, al volver a ejecutarlo se queden guardados los datos al listar tanto libros, como ususarios o como mostrar prestamos.
+    def cargar_datos(self):
+        #Cargar los libros
+        try:
+            with open("datos/libros.json", "r", encoding="utf-8") as fichero:
+                libros_dic = json.load(fichero)
+                for i in libros_dic:
+                    libro = Libro(i["isbn"], i["titulo"], i["autor"], i["genero"], i["anio"], i["disponible"])
+                    self.libros.append(libro)
+        except FileNotFoundError:
+            pass
+        #Cargar los usuarios
+        try:
+            with open("datos/usuarios.json", "r", encoding="utf-8") as fichero:
+                usuarios_dic = json.load(fichero)
+                for i in usuarios_dic:
+                    usuario = Usuario(i["id"], i["nombre"], i["apellidos"], i["email"])
+                    self.usuarios.append(usuario)
+        except:
+            pass
+        #Cargar los prestamos
+        try:
+            with open("datos/prestamos.json", "r", encoding="utf-8") as fichero:
+                prestamos_dic = json.load(fichero)
+                for i in prestamos_dic:
+                    usuario_obj = self.buscar_usuarioID(i["Usuario"])
+                    libro_obj = self.buscar_libroNom(i["Libro"])
+                    fecha_prestamo = date.fromisoformat(i["fecha_prestamo"]) if i["fecha_prestamo"] else None
+                    fecha_devolucion = date.fromisoformat(i["fecha_devolucion"]) if i["fecha_devolucion"] is not None else None
+                    if usuario_obj and libro_obj:
+                        prestamo = Prestamo(usuario_obj, libro_obj, fecha_prestamo, fecha_devolucion)
+                        self.prestamos.append(prestamo)
+        except FileNotFoundError:
+            pass
